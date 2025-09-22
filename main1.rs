@@ -1,11 +1,20 @@
+use std::env;
+use std::fs;
+
 fn main() {
-    let celsius_temp = 23.0;
-    let fahrenheit_temp = celsius_to_fahrenheit(celsius_temp);
+    if env::args().len() < 2 {
+        eprintln!("Program requires two arguments: <file path> <search name>");
+        std::process::exit(1);
+    }
+    let file_path = env::args().nth(1).unwrap();
+    let search_name = env::args().nth(2).unwrap();
 
-    assert_eq!(fahrenheit_temp, 73.4);
-    println!("Test passed!");
-}
+    for line in fs::read_to_string(file_path).unwrap().lines() {
+        if line == search_name {
+            println!("{} did walk on the Moon!", search_name);
+            return;
+        }
+    }
 
-fn celsius_to_fahrenheit(temp: f64) -> f64 {
-    temp * 1.8 + 32.0
+    println!("{} did NOT walk on the Moon... YET!", search_name);
 }
